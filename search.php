@@ -2,6 +2,18 @@
 session_start();
 $action = "";
 
+$servername = "localhost:3306";
+$username = "root";
+$password = "password";
+$database = "adptestdb";
+//Create DB Connection
+$conn = new mysqli($servername, $username, $password, $database);
+$conn_error = false;
+if($conn->connect_error){
+    $conn_error = true;
+}
+
+
 if(!isset($_SESSION["username"])){
     header("Location: index.php");
 }else{
@@ -72,9 +84,45 @@ if(!isset($_SESSION["username"])){
                 <span class="title-reg">Click <a href="search.php?action=logout" class="link1">here</a> to logout.</span><br>
             </div>
         </div>
-    
-        
-        
+        <br><br>
+            <?php
+                if($conn_error == false){
+                    $sql = "SELECT * FROM adptestdb.salesperson LEFT JOIN adptestdb.state on salesperson_state_id=state_id;";
+                    $result = $conn->query($sql);
+                    if($result->num_rows > 0){
+                        ?>
+                        <table bgcolor="#333333" width="80%">
+                            <tr bgcolor="#CCCCCC">
+                                <td>Name</td>
+                                <td>Contact</td>
+                                <td>City</td>
+                                <td>State</td>
+                                <td>Zip</td>
+                                <td>Salary</td>
+                            </tr>
+                        <?php
+                        while($row = $result->fetch_assoc()){
+                        ?>
+                            <tr bgcolor="#f2f2f2">
+                                <td><?=$row["salesperson_name"]?></td>
+                                <td><?=$row["salesperson_contact"]?></td>
+                                <td><?=$row["salesperson_city"]?></td>
+                                <td><?=$row["state_name"]?></td>
+                                <td><?=$row["salesperson_zip"]?></td>
+                                <td>$<?=$row["salesperson_salary"]?></td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                        </table>
+                        <?php
+                    }else{
+                        echo "0 results";
+                    }
+                }else{
+                    echo "No results to display due to connection error.";
+                }
+            ?>
     </body>
 </html>
 <?php
