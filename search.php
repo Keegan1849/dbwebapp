@@ -99,6 +99,7 @@ if(!isset($_SESSION["username"])){
                                 <td>State</td>
                                 <td>Zip</td>
                                 <td>Salary</td>
+                                <td>Edit/Delete</td>
                             </tr>
                         <?php
                         while($row = $result->fetch_assoc()){
@@ -110,6 +111,9 @@ if(!isset($_SESSION["username"])){
                                 <td><?=$row["state_name"]?></td>
                                 <td><?=$row["salesperson_zip"]?></td>
                                 <td>$<?=$row["salesperson_salary"]?></td>
+                                <td>
+                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>"></a>
+                                </td>
                             </tr>
                         <?php
                         }
