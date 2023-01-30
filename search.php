@@ -132,5 +132,7 @@ if(!isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+    $conn->close();
+    
 }
 ?>
