@@ -112,7 +112,9 @@ if(!isset($_SESSION["username"])){
                                 <td><?=$row["salesperson_zip"]?></td>
                                 <td>$<?=$row["salesperson_salary"]?></td>
                                 <td>
-                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>"></a>
+                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>">Edit</a>/
+                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>">Delete</a>
+
                                 </td>
                             </tr>
                         <?php
