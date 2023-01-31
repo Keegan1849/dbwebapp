@@ -1,0 +1,20 @@
+                    <!-- State:&nbsp;
+                    <select name = "state">
+                    <?php
+                        if($conn_error == false){
+                            $sql = "SELECT * FROM adptestdb.state;";
+                            $result = $conn->query($sql);
+                            while($row = $result->fetch_assoc()){
+                                if($state == $row["state_id"]){
+                                    ?>
+                                    <option value="<?=$row["state_id"]?>" selected><?=$row["state_name"]?></option>
+                                <?php
+                                }else{
+                                    ?>
+                                    <option value="<?=$row["state_id"]?>"><?=$row["state_name"]?></option>
+                                <?php
+                                }
+                            }
+                        }
+                    ?>
+                    -->

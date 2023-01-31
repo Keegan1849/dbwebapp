@@ -1,16 +1,15 @@
 <?php
 session_start();
 $action = "";
-
-$fname  = "";
-$lname = "";
+$name = "";
 $contact = "";
 $city = "";
 $state = 0;
 $zip = "";
-$salary = 0.00;
+$salary = "";
 $error = false;
-$error_message = "Please fill it the following feilds:<br>";
+$error_message = "Please fill in the following fields:";
+
 $servername = "localhost:3306";
 $username = "root";
 $password = "password";
@@ -37,58 +36,64 @@ if(!isset($_SESSION["username"])){
         session_destroy();
         header("Location: index.php");
     }
-if(isset()$_POST["Submit"]){
-    if(empty()$_POST["fname"]){
-        $error = true;
-        $error_message .= "-First Name"
-    }else{
-        $fname = $_POST["fname"];
-    }
-    if(empty()$_POST["lname"]){
-        $error = true;
-        $error_message .= "-Last Name"
-    }else{
-        $fname = $_POST["lname"];
-    }
-    if(empty()$_POST["contact"]){
-        $error = true;
-        $error_message .= "-Contact"
-    }else{
-        $fname = $_POST["Contact"];
-    }
-    if(empty()$_POST["city"]){
-        $error = true;
-        $error_message .= "-City"
-    }else{
-        $fname = $_POST["City"];
-    }
-    if(empty()$_POST["state"]){
-        $error = true;
-        $error_message .= "-State"
-    }else{
-        $fname = $_POST["state"];
-    }
-    if(empty()$_POST["zip"]){
-        $error = true;
-        $error_message .= "-Zip"
-    }else{
-        $fname = $_POST["zip"];
-    }
-    if(empty()$_POST["salary"]){
-        $error = true;
-        $error_message .= "-Salary"
-    }else{
-        if(is_numeric($_POST["salary"])){
-            $salary = $_POST["salary"];
 
-        }else{
-            $error_message .= "-Salary is NAN"
+    if(isset($_POST["Submit"])){
+
+        if(empty($_POST["name"])){
+            $error = true;
+            $error_message .= "<br>-Name";
+        } else{
+            $name = $_POST["name"];
         }
+
+        if(empty($_POST["contact"])){
+            $error = true;
+            $error_message .= "<br>-Contact";
+        } else{
+            $contact = $_POST["contact"];
+        }
+
+        if(empty($_POST["city"])){
+            $error = true;
+            $error_message .= "<br>-City";
+        } else{
+            $city = $_POST["city"];
+        }
+
+        echo $_POST["state"]; 
+        if(empty($_POST["state"])){
+            $error = true;
+            $error_message .= "<br>-State";
+        } else{
+            $state = $_POST["state"];
+        }
+
+        if(empty($_POST["zip"])){
+            $error = true;
+            $error_message .= "<br>-Zip";
+        } else{
+            $zip = $_POST["zip"];
+        }
+
+        if(empty($_POST["salary"])){
+            echo "sal 1";
+            $error = true;
+            $error_message .= "<br>-Salary";
+        } else{
+            echo "sal 2";
+            if(is_numeric($_POST["salary"])){
+                echo "sal 3";
+                $salary = $_POST["salary"];
+            }else{
+                echo "sal 4";
+                $error = true;
+                $error_message .= "<br>-Salary is NAN.";
+            }
+        }
+
+
     }
 
-
-
-}
 ?>
 <html>
     <head>
@@ -119,13 +124,15 @@ if(isset()$_POST["Submit"]){
                 display: flex;
                 background-color: #006699;
                 border-radius: 3px;
-                width: 20%;
+                width: 300px;
+                color: #ffffff;
+                font-weight: bold;
             }
             .form-item1{
                 padding:10px;
                 margin: 5px;
-                width: 12%;
-                text-align: right;
+                width: 300px;
+                text-align: left;
             }
             .form-item2{
                 padding:10px;
@@ -142,6 +149,15 @@ if(isset()$_POST["Submit"]){
                 font-size: 12pt;
                 color: #ffffff;
             }
+            span.f1{
+                font-weight: bold;
+                font-size: 22pt;
+                color: #000000;
+            }
+            span.f2{
+                font-size: 16pt;
+                color: #000000;
+            }
             a.link1{
                 font-size: 12pt;
                 color: #e0ebeb;
@@ -156,7 +172,7 @@ if(isset()$_POST["Submit"]){
         <div class="top-container">
             <div class="top-item1">
                 <span class="title">ADP DB WebApp</span><br>
-                <span class="title-reg">Customer Search Page</span>
+                <span class="title-reg">SalesPerson Entry Form</span>
             </div>
             <div class="top-item2">
                 <span class="title-reg">Welcome, <?=$_SESSION["username"]?>.</span><br>
@@ -164,91 +180,38 @@ if(isset()$_POST["Submit"]){
             </div>
         </div>
         <br><br>
-           <form method="post" action="inesert.php">
-        <div class="form-container">
-            <div class="form-item1">
-                Firstname:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="firstname" name="name" value="<?=$fname?>">
-
-            </div>
-        </div>
-        <div class="form-container">
-            <div class="form-item1">
-                Lastname:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="lastname" name="lastname" value="<?=$lname?>">
-
-            </div>
-        </div>
-        <div class="form-container">
-            <div class="form-item1">
-                Contact:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="Contact" name="Contact" value="<?=$contact?>">
-
-            </div>
-        </div>
-        <div class="form-container">
-            <div class="form-item1">
-                City:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="City" name="City" value="<?=$city?>">
-
-            </div>
-        </div>
-        <div class="form-container">
-            <div class="form-item1">
-                State:
-            </div>
-            <div class="form-item2">
-        <select name="state">
-        <?php
-            If($conn_error == false){
-                $sql = "SELECT * FROM adptestdb.state;";
-                $result = $conn->query($sql);
-                while($row = $result->fetch_assoc()){
-                    ?>
-                        <option value="<?=row[state_id]?>"><?=row[state_name]?></option>
-                    <?php
-
-                }
+        <span class="f1">
+            SalesPerson Entry Form
+        </span><br>
+        <span class="f2">
+            Please fill in the fields below.
+        </span><br>
+        <?PHP
+            if($error){
+            echo "<font color=red>" . $error_message . "</font>";
             }
         ?>
+        <form method="POST" action="insert.php">    
+            <div class="form-container">
+                <div class="form-item1">
+                    Name:<br>
+                    <input type="text" name="name" value="<?=$name?>"><br><br>
+                    Contact:<br>
+                    <input type="text" name="contact" value="<?=$contact?>"><br><br>
+                    City:<br>
+                    <input type="text" name="city" value="<?=$city?>"><br><br>
 
 
-        </select> 
+                    </select>
+                    <br><br>
+                    Zip:<br>
+                    <input type="text" name="zip" value="<?=$zip?>"><br><br>
+                    Salary:<br>
+                    <input type="text" name="salary" value="<?=$salary?>"><br><br>
+                    <input type="submit" name="Submit" value="Submit">
+                </div>
             </div>
-
-        </div>  
-     
-        <div class="form-container">
-            <div class="form-item1">
-                Zip:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="Zip" name="Zip" value="<?=$zip?>">
-
-            </div>
-        </div>
-        <div class="form-container">
-            <div class="form-item1">
-                Salary:
-            </div>
-            <div class="form-item2">
-                <input type="text" name="Salary" name="Salary" value="<?=$salary?>">
-                
-
-            </div>
-            
-        </div>
-<input type="submit" value="submit">
-
-           </form>
+        </form>
     </body>
 </html>
 <?php

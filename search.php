@@ -85,6 +85,7 @@ if(!isset($_SESSION["username"])){
             </div>
         </div>
         <br><br>
+        Click <a href="insert.php">Here</a> to add a person to the database.
             <?php
                 if($conn_error == false){
                     $sql = "SELECT * FROM adptestdb.salesperson LEFT JOIN adptestdb.state on salesperson_state_id=state_id;";
