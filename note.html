@@ -17,4 +17,11 @@
                             }
                         }
                     ?>
+                            echo $_POST["state"]; 
+        if(empty($_POST["state"])){
+            $error = true;
+            $error_message .= "<br>-State";
+        } else{
+            $state = $_POST["state"];
+        }
                     -->

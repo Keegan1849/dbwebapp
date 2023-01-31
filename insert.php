@@ -9,6 +9,11 @@ $zip = "";
 $salary = "";
 $error = false;
 $error_message = "Please fill in the following fields:";
+$dberror_message = "The following errors occured:";
+$dberror = false;
+$insert_message = "";
+$record_insert = FALSE;
+
 
 $servername = "localhost:3306";
 $username = "root";
@@ -60,13 +65,7 @@ if(!isset($_SESSION["username"])){
             $city = $_POST["city"];
         }
 
-        echo $_POST["state"]; 
-        if(empty($_POST["state"])){
-            $error = true;
-            $error_message .= "<br>-State";
-        } else{
-            $state = $_POST["state"];
-        }
+
 
         if(empty($_POST["zip"])){
             $error = true;
@@ -88,6 +87,37 @@ if(!isset($_SESSION["username"])){
                 echo "sal 4";
                 $error = true;
                 $error_message .= "<br>-Salary is NAN.";
+            }
+        }
+        if(!$error){
+            if($conn->connect_error){
+                $sql = "INSERT INTO salesperson(salesperson_firstname, salesperson_lastname, salesperson_contact, salesperson_city, salesperson_state_id, salesperson_zip, salesperson_salary) VALUES('$firstname','$lastname','$contact','$city','$state','$zip','$salary');";
+                if($conn->query($sql) == TRUE){
+                    $record_insert = TRUE;
+                    $insert_message = "The following record was inserted into the database:"
+                    $insert_message .= "First name: " . $lastname . "<br>";
+                    $insert_message .= "Last name: " . $lastname . "<br>";
+                    $insert_message .= "Contact: " . $contact . "<br>";
+                    $insert_message .= "state: " . $state . "<br>";
+                    $insert_message .= "zip:" . $zip . "<br>";
+                    $insert_message .= "Salary:" . $salary . "<br>";
+                    $firstname = "";
+                    $lastname = "";
+                    $contact = "";
+                    $state = "";
+                    $zip = "";
+                    $salary = "";
+
+
+
+                                }else{
+                    $dberror = true;
+                    $dberror_message .= "<br>-Error inserting record into database.";
+
+                }
+            }else{
+                $dberror = true;
+                $dberror_message .= "<br>-Could not connect to database.";
             }
         }
 
@@ -189,6 +219,15 @@ if(!isset($_SESSION["username"])){
         <?PHP
             if($error){
             echo "<font color=red>" . $error_message . "</font>";
+            }
+            if(!$dberror){
+                echo "<font color=red>" . $dberror_message . "</font>";
+
+            }
+            IF($record_insert){
+                echo "<font color=green>" . $insert_message . "</font>";
+ 
+
             }
         ?>
         <form method="POST" action="insert.php">    
