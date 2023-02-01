@@ -7,13 +7,12 @@ $city = "";
 $state = 0;
 $zip = "";
 $salary = "";
-$error = false;
+$error = FALSE;
 $error_message = "Please fill in the following fields:";
-$dberror_message = "The following errors occured:";
-$dberror = false;
+$dberror = FALSE; 
+$dberror_message = "The following erorrs occured:";
 $insert_message = "";
-$record_insert = FALSE;
-
+$record_insert = FALSE; 
 
 $servername = "localhost:3306";
 $username = "root";
@@ -65,7 +64,12 @@ if(!isset($_SESSION["username"])){
             $city = $_POST["city"];
         }
 
-
+        if(empty($_POST["state"])){
+            $error = true;
+            $error_message .= "<br>-State";
+        } else{
+            $state = $_POST["state"];
+        }
 
         if(empty($_POST["zip"])){
             $error = true;
@@ -75,55 +79,48 @@ if(!isset($_SESSION["username"])){
         }
 
         if(empty($_POST["salary"])){
-            echo "sal 1";
             $error = true;
             $error_message .= "<br>-Salary";
         } else{
-            echo "sal 2";
             if(is_numeric($_POST["salary"])){
-                echo "sal 3";
                 $salary = $_POST["salary"];
             }else{
-                echo "sal 4";
                 $error = true;
                 $error_message .= "<br>-Salary is NAN.";
             }
         }
+
         if(!$error){
-            if($conn->connect_error){
-                $sql = "INSERT INTO salesperson(salesperson_firstname, salesperson_lastname, salesperson_contact, salesperson_city, salesperson_state_id, salesperson_zip, salesperson_salary) VALUES('$firstname','$lastname','$contact','$city','$state','$zip','$salary');";
+            if(!$conn->connect_error){
+                $sql = "INSERT INTO salesperson(salesperson_name,salesperson_contact,salesperson_city,salesperson_state_id,salesperson_zip,salesperson_salary) VALUES('$name','$contact','$city','$state','$zip','$salary');";
+                
                 if($conn->query($sql) == TRUE){
                     $record_insert = TRUE;
-                    $insert_message = "The following record was inserted into the database:"
-                    $insert_message .= "First name: " . $lastname . "<br>";
-                    $insert_message .= "Last name: " . $lastname . "<br>";
+                    $insert_message = "<br><b>The following record was inserted into the database:</b><br>";
+                    $insert_message .= "Name: " . $name . "<br>";
                     $insert_message .= "Contact: " . $contact . "<br>";
-                    $insert_message .= "state: " . $state . "<br>";
-                    $insert_message .= "zip:" . $zip . "<br>";
-                    $insert_message .= "Salary:" . $salary . "<br>";
-                    $firstname = "";
-                    $lastname = "";
+                    $insert_message .= "City: " . $city . "<br>";
+                    $insert_message .= "State: " . $state . "<br>";
+                    $insert_message .= "Zip: " . $zip . "<br>";
+                    $insert_message .= "Salary: " . $salary . "<br><br>";
+                    $name = "";
                     $contact = "";
-                    $state = "";
+                    $city = "";
+                    $state = 0;
                     $zip = "";
                     $salary = "";
-
-
-
-                                }else{
-                    $dberror = true;
+                    
+                    
+                }else{
+                    $dberror = TRUE;
                     $dberror_message .= "<br>-Error inserting record into database.";
-
                 }
             }else{
-                $dberror = true;
+                $dberror = TRUE;
                 $dberror_message .= "<br>-Could not connect to database.";
             }
         }
-
-
     }
-
 ?>
 <html>
     <head>
@@ -196,6 +193,14 @@ if(!isset($_SESSION["username"])){
                 font-size: 12pt;
                 color: purple;
             }
+            a.test{
+                font-size: 12pt;
+                color: #000000;
+            }
+            a.test:hover{
+                font-size: 12pt;
+                color: #333333;
+            }
         </style>
     </head>
     <body>
@@ -209,7 +214,9 @@ if(!isset($_SESSION["username"])){
                 <span class="title-reg">Click <a href="search.php?action=logout" class="link1">here</a> to logout.</span><br>
             </div>
         </div>
+        <a href="search.php" class="test"> > Back to search page</a>
         <br><br>
+        
         <span class="f1">
             SalesPerson Entry Form
         </span><br>
@@ -218,16 +225,13 @@ if(!isset($_SESSION["username"])){
         </span><br>
         <?PHP
             if($error){
-            echo "<font color=red>" . $error_message . "</font>";
+                echo "<font color=red>" . $error_message . "</font>";
             }
-            if(!$dberror){
+            if($dberror){
                 echo "<font color=red>" . $dberror_message . "</font>";
-
             }
-            IF($record_insert){
-                echo "<font color=green>" . $insert_message . "</font>";
- 
-
+            if($record_insert){
+                echo "<font>" . $insert_message . "</font>";
             }
         ?>
         <form method="POST" action="insert.php">    
@@ -239,8 +243,25 @@ if(!isset($_SESSION["username"])){
                     <input type="text" name="contact" value="<?=$contact?>"><br><br>
                     City:<br>
                     <input type="text" name="city" value="<?=$city?>"><br><br>
-
-
+                    State:&nbsp;
+                    <select name = "state">
+                    <?php
+                        if($conn_error == false){
+                            $sql = "SELECT * FROM adptestdb.state;";
+                            $result = $conn->query($sql);
+                            while($row = $result->fetch_assoc()){
+                                if($state == $row["state_id"]){
+                                    ?>
+                                    <option value="<?=$row["state_id"]?>" selected><?=$row["state_name"]?></option>
+                                <?php
+                                }else{
+                                    ?>
+                                    <option value="<?=$row["state_id"]?>"><?=$row["state_name"]?></option>
+                                <?php
+                                }
+                            }
+                        }
+                    ?>
                     </select>
                     <br><br>
                     Zip:<br>

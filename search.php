@@ -71,6 +71,43 @@ if(!isset($_SESSION["username"])){
                 font-size: 12pt;
                 color: purple;
             }
+            a.tnav{
+                font-size: 11pt;
+                color: #666666;
+            }
+            a.tnav:hover{
+                font-size: 11pt;
+                color: #D6EEEE;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th{
+                text-align: left;
+                padding: 8px;
+                background-color: #93d2d2;
+                font-weight: bold;
+            }
+            td {
+                text-align: left;
+                padding: 8px;
+            }
+            tr:nth-child(odd) {
+                background-color: #D6EEEE;
+            }
+            span.f2{
+                font-size: 16pt;
+                color: #000000;
+            }
+            a.f2link{
+                font-size: 16pt;
+                color: #004466;
+            }
+            a.f2link:hover{
+                font-size: 16pt;
+                color: #4dc3ff;
+            }
         </style>
     </head>
     <body>
@@ -85,27 +122,30 @@ if(!isset($_SESSION["username"])){
             </div>
         </div>
         <br><br>
-        Click <a href="insert.php">Here</a> to add a person to the database.
+        <span class="f2">Click <a href="insert.php" class="f2link">here</a> to add a salesperson to the database.</span>
             <?php
                 if($conn_error == false){
                     $sql = "SELECT * FROM adptestdb.salesperson LEFT JOIN adptestdb.state on salesperson_state_id=state_id;";
                     $result = $conn->query($sql);
                     if($result->num_rows > 0){
                         ?>
-                        <table bgcolor="#333333" width="80%">
-                            <tr bgcolor="#CCCCCC">
-                                <td>Name</td>
-                                <td>Contact</td>
-                                <td>City</td>
-                                <td>State</td>
-                                <td>Zip</td>
-                                <td>Salary</td>
-                                <td>Edit/Delete</td>
+                        <table width="99%">
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>Salary</th>
+                                <th>Edit/Delete</th>
                             </tr>
                         <?php
+                        $count = 1;
                         while($row = $result->fetch_assoc()){
                         ?>
-                            <tr bgcolor="#f2f2f2">
+                            <tr>
+                                <td><?=$count?></td>
                                 <td><?=$row["salesperson_name"]?></td>
                                 <td><?=$row["salesperson_contact"]?></td>
                                 <td><?=$row["salesperson_city"]?></td>
@@ -113,12 +153,11 @@ if(!isset($_SESSION["username"])){
                                 <td><?=$row["salesperson_zip"]?></td>
                                 <td>$<?=$row["salesperson_salary"]?></td>
                                 <td>
-                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>">Edit</a>/
-                                    <a href="edit.php?action=edit&id=<?=$row["salesperson.id"]?>">Delete</a>
-
+                                    <a href="edit.php?action=edit&id=<?=$row["salesperson_id"]?>" class="tnav">Edit</a> / <a href="edit.php?action=delete&id=<?=$row["salesperson_id"]?>"  class="tnav">Delete</a>
                                 </td>
                             </tr>
                         <?php
+                            $count++;
                         }
                         ?>
                         </table>
@@ -133,7 +172,5 @@ if(!isset($_SESSION["username"])){
     </body>
 </html>
 <?php
-    $conn->close();
-    
 }
 ?>
