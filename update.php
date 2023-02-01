@@ -1,6 +1,7 @@
 <?php
 session_start();
 $action = "";
+$id = "";
 $name = "";
 $contact = "";
 $city = "";
@@ -11,8 +12,8 @@ $error = FALSE;
 $error_message = "Please fill in the following fields:";
 $dberror = FALSE; 
 $dberror_message = "The following erorrs occured:";
-$insert_message = "";
-$record_insert = FALSE; 
+$update_message = "";
+$record_update = FALSE; 
 
 $servername = "localhost:3306";
 $username = "root";
@@ -41,7 +42,33 @@ if(!isset($_SESSION["username"])){
         header("Location: index.php");
     }
 
+    //Populate Salesperson Fields 
+    if(isset($_GET["id"])){
+        $id = $_GET["id"];
+        if($conn->connect_error){
+            //DB Connect Error Message Goes Here. 
+        }else{
+            $sql = "SELECT * FROM salesperson LEFT JOIN state ON salesperson_state_id = state_id WHERE salesperson_id = " . $id . ";";
+            $result = $conn->query($sql);
+            if($result->num_rows > 0){
+                $row = $result->fetch_assoc();
+                $name = $row["salesperson_name"];
+                $contact = $row["salesperson_contact"];
+                $city = $row["salesperson_city"];
+                $state = $row["state_id"];
+                $zip = $row["salesperson_zip"];
+                $salary = $row["salesperson_salary"];
+            }else{
+                //Generate Error Message - Salesperson w/that ID not found. 
+            }
+        }
+    }else{
+        //Display error message.. couldn't retrieve id. 
+    }
+
     if(isset($_POST["Submit"])){
+
+        $id = $_POST["id"];
 
         if(empty($_POST["name"])){
             $error = true;
@@ -92,28 +119,17 @@ if(!isset($_SESSION["username"])){
 
         if(!$error){
             if(!$conn->connect_error){
-                $sql = "INSERT INTO salesperson(salesperson_name,salesperson_contact,salesperson_city,salesperson_state_id,salesperson_zip,salesperson_salary) VALUES('$name','$contact','$city','$state','$zip','$salary');";
-                
+                $sql = "UPDATE salesperson SET salesperson_name='{$name}',salesperson_contact='{$contact}',salesperson_city='{$city}',salesperson_state_id='{$state}',salesperson_zip='{$zip}',salesperson_salary='{$salary}' where salesperson_id={$id};";
+                echo $sql; 
                 if($conn->query($sql) == TRUE){
-                    $record_insert = TRUE;
-                    $insert_message = "<br><b>The following record was inserted into the database:</b><br>";
-                    $insert_message .= "Name: " . $name . "<br>";
-                    $insert_message .= "Contact: " . $contact . "<br>";
-                    $insert_message .= "City: " . $city . "<br>";
-                    $insert_message .= "State: " . $state . "<br>";
-                    $insert_message .= "Zip: " . $zip . "<br>";
-                    $insert_message .= "Salary: " . $salary . "<br><br>";
-                    $name = "";
-                    $contact = "";
-                    $city = "";
-                    $state = 0;
-                    $zip = "";
-                    $salary = "";
+                    $record_update = TRUE;
+                    $update_message = "<br><b>The following record was updated!</b><br>";
+                    
                     
                     
                 }else{
                     $dberror = TRUE;
-                    $dberror_message .= "<br>-Error inserting record into database.";
+                    $dberror_message .= "<br>-Error updating record.";
                 }
             }else{
                 $dberror = TRUE;
@@ -219,10 +235,10 @@ if(!isset($_SESSION["username"])){
         <a href="search.php" class="back"> > Back to search page</a>
         <br><br>
         <span class="f1">
-            SalesPerson Entry Form
+            SalesPerson Update Form
         </span><br>
         <span class="f2">
-            Please fill in the fields below.
+            Please update fields below.
         </span><br>
         <?PHP
             if($error){
@@ -231,12 +247,13 @@ if(!isset($_SESSION["username"])){
             if($dberror){
                 echo "<font color=red>" . $dberror_message . "</font>";
             }
-            if($record_insert){
-                echo "<font>" . $insert_message . "</font>";
+            if($record_update){
+                echo "<font>" . $update_message . "</font>";
             }
         ?>
-        <form method="POST" action="insert.php">    
+        <form method="POST" action="update.php">    
             <div class="form-container">
+                <input type="hidden" name="id" value="<?=$id?>">
                 <div class="form-item1">
                     Name:<br>
                     <input type="text" name="name" value="<?=$name?>"><br><br>

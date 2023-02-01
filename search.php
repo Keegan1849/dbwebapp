@@ -153,7 +153,7 @@ if(!isset($_SESSION["username"])){
                                 <td><?=$row["salesperson_zip"]?></td>
                                 <td>$<?=$row["salesperson_salary"]?></td>
                                 <td>
-                                    <a href="edit.php?action=edit&id=<?=$row["salesperson_id"]?>" class="tnav">Edit</a> / <a href="edit.php?action=delete&id=<?=$row["salesperson_id"]?>"  class="tnav">Delete</a>
+                                    <a href="update.php?id=<?=$row["salesperson_id"]?>" class="tnav">Edit</a> / <a href="delete.php?id=<?=$row["salesperson_id"]?>"  class="tnav">Delete</a>
                                 </td>
                             </tr>
                         <?php
