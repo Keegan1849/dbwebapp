@@ -2,7 +2,8 @@
 session_start();
 $action = "";
 $id = "";
-$name = "";
+$firstname = "";
+$lastname = "";
 $contact = "";
 $city = "";
 $state = 0;
@@ -52,7 +53,8 @@ if(!isset($_SESSION["username"])){
             $result = $conn->query($sql);
             if($result->num_rows > 0){
                 $row = $result->fetch_assoc();
-                $name = $row["salesperson_name"];
+                $name = $row["salesperson_firstname"];
+                $name = $row["salesperson_lastname"];
                 $contact = $row["salesperson_contact"];
                 $city = $row["salesperson_city"];
                 $state = $row["state_id"];
@@ -70,11 +72,17 @@ if(!isset($_SESSION["username"])){
 
         $id = $_POST["id"];
 
-        if(empty($_POST["name"])){
+        if(empty($_POST["firstname"])){
             $error = true;
-            $error_message .= "<br>-Name";
+            $error_message .= "<br>-First Name";
         } else{
-            $name = $_POST["name"];
+            $name = $_POST["firstname"];
+        }
+        if(empty($_POST["lastname"])){
+            $error = true;
+            $error_message .= "<br>-Last Name";
+        } else{
+            $name = $_POST["lastname"];
         }
 
         if(empty($_POST["contact"])){
@@ -119,7 +127,7 @@ if(!isset($_SESSION["username"])){
 
         if(!$error){
             if(!$conn->connect_error){
-                $sql = "UPDATE salesperson SET salesperson_name='{$name}',salesperson_contact='{$contact}',salesperson_city='{$city}',salesperson_state_id='{$state}',salesperson_zip='{$zip}',salesperson_salary='{$salary}' where salesperson_id={$id};";
+                $sql = "UPDATE salesperson SET salesperson_firstname='{$firstname}',salesperson_lastname='{$lastname}',salesperson_contact='{$contact}',salesperson_city='{$city}',salesperson_state_id='{$state}',salesperson_zip='{$zip}',salesperson_salary='{$salary}' where salesperson_id={$id};";
                 echo $sql; 
                 if($conn->query($sql) == TRUE){
                     $record_update = TRUE;
@@ -255,8 +263,10 @@ if(!isset($_SESSION["username"])){
             <div class="form-container">
                 <input type="hidden" name="id" value="<?=$id?>">
                 <div class="form-item1">
-                    Name:<br>
-                    <input type="text" name="name" value="<?=$name?>"><br><br>
+                    First Name:<br>
+                    <input type="text" name="firstname" value="<?=$firstname?>"><br><br>
+                    Last Name:<br>
+                    <input type="text" lastname="name" value="<?=$lastname?>"><br><br>
                     Contact:<br>
                     <input type="text" name="contact" value="<?=$contact?>"><br><br>
                     City:<br>

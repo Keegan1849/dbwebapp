@@ -146,7 +146,8 @@ if(!isset($_SESSION["username"])){
                         ?>
                             <tr>
                                 <td><?=$count?></td>
-                                <td><?=$row["salesperson_name"]?></td>
+                                <td><?=$row["salesperson_firstname"]?></td>
+                                <td><?=$row["salesperson_lastname"]?></td>
                                 <td><?=$row["salesperson_contact"]?></td>
                                 <td><?=$row["salesperson_city"]?></td>
                                 <td><?=$row["state_name"]?></td>
